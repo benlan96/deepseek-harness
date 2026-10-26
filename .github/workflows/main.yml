@@ -4,7 +4,7 @@ on:
 
 permissions:
   contents: write
-  workflows: write   # 新增这一行！专门解决这个报错
+  actions: write
 
 jobs:
   sync-tags:
