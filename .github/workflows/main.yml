@@ -1,15 +1,22 @@
-name: Sync upstream including tags
+name: Sync upstream tags only
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  sync:
+  sync-tags:
     runs-on: ubuntu-latest
     steps:
-      - name: Sync from upstream
-        uses: repo-sync/github-sync@v2
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          source_repo: "deepseek-ai/deepseek-harness"
-          source_branch: "*"
-          destination_branch: "*"
-          sync_tags: "true"
+          fetch-depth: 0
+
+      - name: Sync tags from deepseek-ai/deepseek-harness
+        run: |
+          git remote add upstream https://github.com/deepseek-ai/deepseek-harness.git
+          git fetch upstream --tags
+          # 只推送新增tag，不会删除你仓库已有的tag，也完全不动分支
+          git push origin --tags
