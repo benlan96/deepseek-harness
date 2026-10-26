@@ -4,6 +4,7 @@ on:
 
 permissions:
   contents: write
+  workflows: write   # 新增这一行！专门解决这个报错
 
 jobs:
   sync-tags:
@@ -18,5 +19,4 @@ jobs:
         run: |
           git remote add upstream https://github.com/deepseek-ai/deepseek-harness.git
           git fetch upstream --tags
-          # 只推送新增tag，不会删除你仓库已有的tag，也完全不动分支
           git push origin --tags
