@@ -1,22 +1,17 @@
-name: Sync upstream tags only
+name: Sync upstream tags
 on:
+  schedule:
+    - cron: '0 3 * * *'
   workflow_dispatch:
-
 permissions:
   contents: write
-  actions: write
-
 jobs:
-  sync-tags:
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Sync tags from deepseek-ai/deepseek-harness
-        run: |
-          git remote add upstream https://github.com/deepseek-ai/deepseek-harness.git
-          git fetch upstream --tags
-          git push origin --tags
+      - run: |
+          git fetch --force --tags https://github.com/deepseek-ai/deepseek-harness.git '+refs/tags/*:refs/tags/*'
+          git push --force --tags origin
